@@ -15,13 +15,10 @@ public final class StringUtils {
     throw new RuntimeException("No instace for you!");
   }
 
-  private static final StringWrapper EMPTY = NullWrapper.of("");
-
   public static StringWrapper empty() {
-    return EMPTY;
+    return EmptyWrapper.INSTANCE;
   }
-  
-  
+
   /** Quick check if both are the same strings. */
   static boolean same(final CharSequence a, final CharSequence b) {
     if (a == b)
@@ -39,8 +36,8 @@ public final class StringUtils {
     }
 
     if (a instanceof Substring) {
-      Substring _a = (Substring) a;
-      Substring _b = (Substring) b;
+      final Substring _a = (Substring) a;
+      final Substring _b = (Substring) b;
       if (_a.getBegin() == _b.getBegin() && _a.getEnd() == _b.getEnd())
         return true;
     }
@@ -87,8 +84,8 @@ public final class StringUtils {
       return false;
     int i = 0;
     while (len-- > 0) {
-      char c1 = a.charAt(i);
-      char c2 = b.charAt(i);
+      final char c1 = a.charAt(i);
+      final char c2 = b.charAt(i);
       i++;
 
       if (c1 == c2) {
@@ -149,7 +146,7 @@ public final class StringUtils {
    *          The sequence
    * @return a hash code
    */
-  public static int hashCode(CharSequence s) {
+  public static int hashCode(final CharSequence s) {
     final int length = s.length();
     int h = 0;
     for (int i = 0; i < length; i++) {
@@ -158,24 +155,24 @@ public final class StringUtils {
     return h;
   }
 
-  public static byte[] getBytes(CharSequence s, Charset charset) {
+  public static byte[] getBytes(final CharSequence s, final Charset charset) {
     requireNonNull(s, "s");
     requireNonNull(charset, "charset");
     if (s.length() == 0)
       return new byte[0];
-    CharsetEncoder ce = charset.newEncoder();
-    int maxLen = (int) (s.length() * (double) ce.maxBytesPerChar());
-    byte[] ba = new byte[maxLen];
+    final CharsetEncoder ce = charset.newEncoder();
+    final int maxLen = (int) (s.length() * (double) ce.maxBytesPerChar());
+    final byte[] ba = new byte[maxLen];
 
     ce.onMalformedInput(CodingErrorAction.REPLACE)//
-        .onUnmappableCharacter(CodingErrorAction.REPLACE)//
-        .reset();
+    .onUnmappableCharacter(CodingErrorAction.REPLACE)//
+    .reset();
     try {
       final ByteBuffer buffer = ce.encode(CharBuffer.wrap(s));
       if (buffer.position() == ba.length)
         return ba;
       return Arrays.copyOf(ba, buffer.position());
-    } catch (CharacterCodingException x) {
+    } catch (final CharacterCodingException x) {
       throw new Error(x);
     }
   }

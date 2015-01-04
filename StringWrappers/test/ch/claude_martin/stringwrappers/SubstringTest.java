@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class SubstringTest extends AbstractStringWrapperTest {
 
-  public SubstringTest(String input) {
+  public SubstringTest(final String input) {
     super(input);
   }
 
@@ -36,7 +36,7 @@ public class SubstringTest extends AbstractStringWrapperTest {
 
       if (m < 1024)
         for (int j = i; j <= m; j++) {
-          CharSequence str_i_j = Substring.of(str, i, j);
+          final CharSequence str_i_j = Substring.of(str, i, j);
           this.assertEqualStrings(str.subSequence(i, j), str_i_j);
         }
       else
@@ -48,28 +48,28 @@ public class SubstringTest extends AbstractStringWrapperTest {
     try {
       Substring.of(str, -1);
       fail();
-    } catch (StringIndexOutOfBoundsException t) {
+    } catch (final StringIndexOutOfBoundsException t) {
       // expected!
     }
 
     try {
       Substring.of(str, 0, str.length() + 1);
       fail();
-    } catch (StringIndexOutOfBoundsException t) {
+    } catch (final StringIndexOutOfBoundsException t) {
       // expected!
     }
 
     try {
       Substring.of(str, 1, 0);
       fail();
-    } catch (StringIndexOutOfBoundsException t) {
+    } catch (final StringIndexOutOfBoundsException t) {
       // expected!
     }
 
     try {
       Substring.of(null, 1, 0);
       fail();
-    } catch (NullPointerException t) {
+    } catch (final NullPointerException t) {
       // expected!
     }
 
@@ -79,25 +79,25 @@ public class SubstringTest extends AbstractStringWrapperTest {
   public void testTrim() throws Exception {
     // Trim uses Substring!
 
-    StringWrapper wrapped = NullWrapper.of(this.input);
+    final StringWrapper wrapped = NullWrapper.of(this.input);
 
-    StringWrapper trimmed1 = NullWrapper.of(this.input.trim());
-    StringWrapper trimmed2 = wrapped.trim();
+    final StringWrapper trimmed1 = NullWrapper.of(this.input.trim());
+    final StringWrapper trimmed2 = wrapped.trim();
 
-    assertEqualStrings(trimmed1, trimmed2);
+    this.assertEqualStrings(trimmed1, trimmed2);
 
-    StringWrapper trimmed3 = wrapped.trim(' ', '\t', '\n', '\r', '\f');
-    StringWrapper trimmed4 = wrapped.trim(asList(' ', '\t', '\n', '\r', '\f'));
+    final StringWrapper trimmed3 = wrapped.trim(' ', '\t', '\n', '\r', '\f');
+    final StringWrapper trimmed4 = wrapped.trim(asList(' ', '\t', '\n', '\r', '\f'));
 
-    assertEqualStrings(trimmed3, trimmed4);
+    this.assertEqualStrings(trimmed3, trimmed4);
 
   }
 
   @Test
   public final void testOfLength() {
-    String str = this.input;
-    int l = str.length();
-    int m = l / 2;
+    final String str = this.input;
+    final int l = str.length();
+    final int m = l / 2;
 
     for (int i = 0; i <= str.length(); i++) {
       this.assertEqualStrings(Substring.of(str, 0, i), Substring.ofLength(str, 0, i));

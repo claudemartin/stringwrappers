@@ -4,7 +4,6 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * This is the common interface of all wrapper classes. This extends {@link CharSequence} and adds
@@ -35,20 +34,20 @@ public interface StringWrapper extends CharSequence {
 
   StringWrapper trim();
 
-  StringWrapper trim(char chr, char... more);
+  StringWrapper trim(final char chr, final char... more);
 
-  StringWrapper trim(Collection<Character> chars);
+  StringWrapper trim(final Collection<Character> chars);
 
-  StringWrapper concat(CharSequence... s);
+  StringWrapper concat(final CharSequence... s);
 
   /** Maps all characters. */
-  StringWrapper map(CharMapper mapper);
+  StringWrapper map(final CharMapper mapper);
 
-  StringWrapper substring(int begin, int end);
+  StringWrapper substring(final int begin, final int end);
 
-  List<StringWrapper> split(String regexp);
+  List<StringWrapper> split(final String regexp);
 
-  boolean matches(String regex);
+  boolean matches(final String regex);
 
   /**
    * Compares this to the specified {@code CharSequence}. The result is {@code true} if and only if
@@ -62,7 +61,7 @@ public interface StringWrapper extends CharSequence {
    * @return {@code true} if this {@code StringWrapper} represents the same sequence of char values
    *         as the specified sequence, {@code false} otherwise
    */
-  boolean contentEquals(CharSequence cs);
+  boolean contentEquals(final CharSequence cs);
 
   /**
    * Encodes this {@code StringWrapper} into a sequence of bytes using the given
@@ -74,8 +73,13 @@ public interface StringWrapper extends CharSequence {
    * @return The resultant byte array
    *
    */
-  byte[] getBytes(Charset charset);
+  byte[] getBytes(final Charset charset);
+
+  boolean isEmpty();
 
   StringWrapper reversed();
+
+  /** Repeat this string x times. */
+  StringWrapper repeat(final int x);
 
 }

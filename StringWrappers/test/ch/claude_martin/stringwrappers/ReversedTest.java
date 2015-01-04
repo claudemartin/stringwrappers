@@ -1,34 +1,31 @@
 package ch.claude_martin.stringwrappers;
 
-import static java.util.Arrays.asList;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import java.util.regex.Pattern;
 
 import org.junit.Test;
 
 public class ReversedTest extends AbstractStringWrapperTest {
 
-  public ReversedTest(String input) {
+  public ReversedTest(final String input) {
     super(input);
   }
 
-  private static String reversed(String s) {
+  private static String reversed(final String s) {
     return new StringBuffer(s).reverse().toString();
   }
 
   @Test
   public final void testOf() {
-    String str = this.input;
+    final String str = this.input;
 
     final StringWrapper rev = Reversed.of(str);
     final String rts = reversed(str);
 
     try {
       this.assertEqualStrings(rts, rev);
-    } catch (AssertionError e) {
+    } catch (final AssertionError e) {
       for (int i = 0; i < str.length(); i++) {
         final char rts_i = rts.charAt(i);
         final char rev_i = rev.charAt(i);
@@ -55,7 +52,7 @@ public class ReversedTest extends AbstractStringWrapperTest {
     try {
       Reversed.of(null);
       fail();
-    } catch (NullPointerException t) {
+    } catch (final NullPointerException t) {
       // expected!
     }
 

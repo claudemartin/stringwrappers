@@ -3,18 +3,13 @@ package ch.claude_martin.stringwrappers;
 import static java.util.Objects.requireNonNull;
 
 import java.nio.CharBuffer;
-import java.nio.charset.Charset;
-import java.util.Collection;
-import java.util.List;
-
-import javax.swing.JApplet;
 
 /**
  * This wrapper doesn't modify the CharSequence at all.
  */
 public final class NullWrapper extends AbstractSourceWrapper {
 
-  private NullWrapper(CharSequence source) {
+  private NullWrapper(final CharSequence source) {
     super(source);
   }
 
@@ -29,7 +24,7 @@ public final class NullWrapper extends AbstractSourceWrapper {
     return of(CharBuffer.wrap(cs));
   }
 
-  public static StringWrapper of(CharSequence source) {
+  public static StringWrapper of(final CharSequence source) {
     requireNonNull(source, "source");
     if (source instanceof StringWrapper)
       return (StringWrapper) source;
@@ -37,7 +32,7 @@ public final class NullWrapper extends AbstractSourceWrapper {
   }
 
   @Override
-  public char charAt(int index) {
+  public char charAt(final int index) {
     return this.getSource().charAt(index);
   }
 

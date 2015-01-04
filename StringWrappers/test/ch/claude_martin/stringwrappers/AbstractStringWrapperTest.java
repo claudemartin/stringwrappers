@@ -1,7 +1,6 @@
 package ch.claude_martin.stringwrappers;
 
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
@@ -17,12 +16,12 @@ import org.junit.runners.Parameterized.Parameters;
 public abstract class AbstractStringWrapperTest {
 
   @SuppressWarnings("static-method")
-  public void assertEqualStrings(CharSequence expected, CharSequence actual) {
+  public void assertEqualStrings(final CharSequence expected, final CharSequence actual) {
     if (!StringUtils.equals(expected, actual))
       fail("'" + expected + "' != '" + actual + "'");
   }
 
-  public static Collection<Object[]> data = null;
+  private static Collection<Object[]> data = null;
 
   @Parameters
   public static synchronized Collection<Object[]> data() {
@@ -30,8 +29,8 @@ public abstract class AbstractStringWrapperTest {
       return data;
 
     final List<Object[]> params = new ArrayList<>();
-    StringBuilder all = new StringBuilder();
-    for (String s : asList("", "x", "X", " \t \n \f \r \b \" \' \\ ", "0123456789",
+    final StringBuilder all = new StringBuilder();
+    for (final String s : asList("", "x", "X", " \t \n \f \r \b \" \' \\ ", "0123456789",
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "+$!(/\"\\|", "\uD834\uDD1E",
         "\0", "x\0x", " ")) {
       params.add(new Object[] { s });
@@ -56,7 +55,7 @@ public abstract class AbstractStringWrapperTest {
 
   protected final String input;
 
-  public AbstractStringWrapperTest(String input) {
+  public AbstractStringWrapperTest(final String input) {
     this.input = input;
   }
 

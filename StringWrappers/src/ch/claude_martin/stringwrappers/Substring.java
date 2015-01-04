@@ -2,8 +2,6 @@ package ch.claude_martin.stringwrappers;
 
 import static java.util.Objects.requireNonNull;
 
-import javax.swing.JApplet;
-
 /**
  * A substring of some {@link CharSequence}, that holds a reference to the original sequence. In
  * contrast to {@link String} this does not allocate a new array. For large source sequences this
@@ -19,7 +17,7 @@ public final class Substring extends AbstractSourceWrapper {
   /** The end index, exclusive. */
   private final int end;
 
-  private Substring(CharSequence source, int begin, int end) {
+  private Substring(final CharSequence source, final int begin, final int end) {
     super(source);
     if (begin < 0) {
       throw new StringIndexOutOfBoundsException(begin);
@@ -36,7 +34,7 @@ public final class Substring extends AbstractSourceWrapper {
     this.end = end;
   }
 
-  public static StringWrapper of(CharSequence source, int begin, int end) {
+  public static StringWrapper of(final CharSequence source, final int begin, final int end) {
     requireNonNull(source, "source");
     if (begin == 0 && end == source.length())
       return NullWrapper.of(source);
@@ -47,12 +45,12 @@ public final class Substring extends AbstractSourceWrapper {
     return new Substring(source, begin, end);
   }
 
-  public static CharSequence of(CharSequence source, int begin) {
+  public static CharSequence of(final CharSequence source, final int begin) {
     requireNonNull(source, "source");
     return of(source, begin, source.length());
   }
 
-  public static CharSequence ofLength(CharSequence source, int begin, int length) {
+  public static CharSequence ofLength(final CharSequence source, final int begin, final int length) {
     requireNonNull(source, "source");
     if (begin == 0 && length == source.length())
       return source;
@@ -69,7 +67,7 @@ public final class Substring extends AbstractSourceWrapper {
   }
 
   @Override
-  public char charAt(int index) {
+  public char charAt(final int index) {
     if (index < 0 || index >= this.length())
       throw new StringIndexOutOfBoundsException(index);
     return this.getSource().charAt(this.getBegin() + index);
@@ -77,7 +75,7 @@ public final class Substring extends AbstractSourceWrapper {
 
   @SuppressWarnings("hiding")
   @Override
-  public CharSequence subSequence(int begin, int end) {
+  public CharSequence subSequence(final int begin, final int end) {
     return of(this, begin, end);
   }
 

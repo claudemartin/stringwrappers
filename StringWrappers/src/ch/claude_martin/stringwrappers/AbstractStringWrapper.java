@@ -1,6 +1,5 @@
 package ch.claude_martin.stringwrappers;
 
-import static java.util.Arrays.asList;
 import static java.util.Objects.requireNonNull;
 
 import java.nio.charset.Charset;
@@ -27,27 +26,27 @@ abstract class AbstractStringWrapper implements StringWrapper {
   public StringWrapper trim() {
     int begin = 0;
     int end = this.length();
-    while ((begin < end) && (charAt(begin) <= ' ')) {
+    while ((begin < end) && (this.charAt(begin) <= ' ')) {
       begin++;
     }
-    while ((begin < end) && (charAt(end - 1) <= ' ')) {
+    while ((begin < end) && (this.charAt(end - 1) <= ' ')) {
       end--;
     }
-    return ((begin > 0) || (end < this.length())) ? substring(begin, end) : this;
+    return ((begin > 0) || (end < this.length())) ? this.substring(begin, end) : this;
   }
 
   @Override
-  public StringWrapper trim(char chr, char... more) {
-    Set<Character> set = new TreeSet<>();
+  public StringWrapper trim(final char chr, final char... more) {
+    final Set<Character> set = new TreeSet<>();
     set.add(chr);
-    for (Character c : more) {
+    for (final Character c : more) {
       set.add(c);
     }
-    return trim(set);
+    return this.trim(set);
   }
 
   @Override
-  public StringWrapper trim(Collection<Character> chars) {
+  public StringWrapper trim(final Collection<Character> chars) {
     Set<Character> set;
     if (chars instanceof Set)
       set = (Set<Character>) chars;
@@ -69,12 +68,12 @@ abstract class AbstractStringWrapper implements StringWrapper {
   }
 
   @Override
-  public StringWrapper concat(CharSequence... s) {
+  public StringWrapper concat(final CharSequence... s) {
     return Concat.of(this, s);
   }
 
   @Override
-  public StringWrapper map(CharMapper mapper) {
+  public StringWrapper map(final CharMapper mapper) {
     return CharWrapper.of(this, mapper);
   }
 
@@ -84,19 +83,28 @@ abstract class AbstractStringWrapper implements StringWrapper {
   }
 
   @Override
-  public StringWrapper substring(int begin, int end) {
+  public StringWrapper repeat(final int x) {
+    if (x < 0)
+      throw new IllegalArgumentException("x<0");
+    if (x == 1)
+      return this;
+    return Concat.repeat(this, x);
+  }
+
+  @Override
+  public StringWrapper substring(final int begin, final int end) {
     return Substring.of(this, begin, end);
   }
 
   @Override
-  public CharSequence subSequence(int start, int end) {
-    return substring(start, end);
+  public CharSequence subSequence(final int start, final int end) {
+    return this.substring(start, end);
   }
 
   @Override
-  public List<StringWrapper> split(String regexp) {
-    List<StringWrapper> list = new ArrayList<>();
-    Matcher m = Pattern.compile(regexp).matcher(this);
+  public List<StringWrapper> split(final String regexp) {
+    final List<StringWrapper> list = new ArrayList<>();
+    final Matcher m = Pattern.compile(regexp).matcher(this);
     while (m.find()) {
       list.add(this.substring(m.start(), m.end()));
     }
@@ -104,12 +112,12 @@ abstract class AbstractStringWrapper implements StringWrapper {
   }
 
   @Override
-  public boolean matches(String regex) {
+  public boolean matches(final String regex) {
     return Pattern.matches(regex, this);
   }
 
   @Override
-  public boolean contentEquals(CharSequence cs) {
+  public boolean contentEquals(final CharSequence cs) {
     if (cs instanceof StringBuffer) {
       synchronized (cs) {
         return StringUtils.equals(this, cs);
@@ -119,7 +127,7 @@ abstract class AbstractStringWrapper implements StringWrapper {
   }
 
   @Override
-  public byte[] getBytes(Charset charset) {
+  public byte[] getBytes(final Charset charset) {
     requireNonNull(charset, "charset");
     return StringUtils.getBytes(this, charset);
   }
@@ -129,4 +137,8 @@ abstract class AbstractStringWrapper implements StringWrapper {
     return new StringBuilder(this).toString();
   }
 
+  @Override
+  public boolean isEmpty() {
+    return this.length() == 0;
+  }
 }

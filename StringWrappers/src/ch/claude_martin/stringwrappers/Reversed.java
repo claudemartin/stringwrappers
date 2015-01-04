@@ -1,6 +1,5 @@
 package ch.claude_martin.stringwrappers;
 
-import static java.util.Collections.newSetFromMap;
 import static java.util.Objects.requireNonNull;
 
 /**
@@ -12,11 +11,11 @@ import static java.util.Objects.requireNonNull;
  */
 public final class Reversed extends AbstractSourceWrapper {
 
-  Reversed(CharSequence source) {
+  Reversed(final CharSequence source) {
     super(source);
   }
 
-  public static StringWrapper of(CharSequence source) {
+  public static StringWrapper of(final CharSequence source) {
     requireNonNull(source, "source");
     if (source.length() < 2)
       return NullWrapper.of(source);
@@ -27,7 +26,7 @@ public final class Reversed extends AbstractSourceWrapper {
   }
 
   @Override
-  public char charAt(int index) {
+  public char charAt(final int index) {
     final CharSequence source = this.getSource();
 
     final int l_i = source.length() - index;

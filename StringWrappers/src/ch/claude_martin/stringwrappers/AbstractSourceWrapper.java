@@ -1,18 +1,11 @@
 package ch.claude_martin.stringwrappers;
 
-import static java.util.Objects.requireNonNull;
-
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /** Wraps one single source sequence. */
 abstract class AbstractSourceWrapper extends AbstractStringWrapper {
   private final CharSequence source;
 
-  public AbstractSourceWrapper(CharSequence source) {
+  public AbstractSourceWrapper(final CharSequence source) {
     super();
     this.source = source;
   }
