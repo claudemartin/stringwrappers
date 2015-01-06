@@ -3,10 +3,11 @@ package ch.claude_martin.stringwrappers;
 import static java.util.Objects.requireNonNull;
 
 /**
- * Wraps this character sequence as the reverse of the sequence. If there are any surrogate pairs
- * included in the sequence, these are treated as single characters for the reverse operation. Thus,
- * the order of the high-low surrogates is never reversed.
- * 
+ * Wraps this character sequence as the reverse of the sequence. If there are
+ * any surrogate pairs included in the sequence, these are treated as single
+ * characters for the reverse operation. Thus, the order of the high-low
+ * surrogates is never reversed.
+ *
  * @see StringBuilder#reverse()
  */
 public final class Reversed extends AbstractSourceWrapper {

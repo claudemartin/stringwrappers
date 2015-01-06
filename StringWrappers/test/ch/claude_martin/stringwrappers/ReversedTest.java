@@ -1,8 +1,6 @@
 package ch.claude_martin.stringwrappers;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import org.junit.Test;
 
@@ -43,7 +41,8 @@ public class ReversedTest extends AbstractStringWrapperTest {
 
     // test bad surrogate:
     if (rev.length() == 2 && Character.isHighSurrogate(str.charAt(0))) {
-      // If str is a surrogate pair then rev1 will only contain one high-surrogate:
+      // If str is a surrogate pair then rev1 will only contain one
+      // high-surrogate:
       final StringWrapper rev1 = Reversed.of(Concat.of("XYZ", Substring.ofLength(str, 0, 1)));
       assertTrue(Character.isHighSurrogate(rev1.charAt(0)));
     }

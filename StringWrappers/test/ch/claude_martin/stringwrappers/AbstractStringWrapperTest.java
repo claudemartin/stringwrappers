@@ -15,10 +15,31 @@ import org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public abstract class AbstractStringWrapperTest {
 
+  private final CharMapper printable = new CharMapper() {
+    @Override
+    public char map(final char c) {
+      if (c < ' ' || c > '~')
+        return '?';
+      return c;
+    }
+  };
+
+  CharSequence pretty(final CharSequence s) {
+    return CharWrapper.of(Substring.ofMaxLength(s, 20, "..."), this.printable);
+  }
+
   @SuppressWarnings("static-method")
   public void assertEqualStrings(final CharSequence expected, final CharSequence actual) {
-    if (!StringUtils.equals(expected, actual))
-      fail("'" + expected + "' != '" + actual + "'");
+    if (StringUtils.same(expected, actual))
+      return;
+    for (int i = 0; i < expected.length(); i++) {
+      final char exp = expected.charAt(i);
+      final char act = actual.charAt(i);
+      if (exp != act) {
+        fail(String.format("'%s' != '%s' => char at %d should be <%s>, but was <%s>", //
+            this.pretty(expected), this.pretty(actual), i, String.valueOf(exp), String.valueOf(act)));
+      }
+    }
   }
 
   private static Collection<Object[]> data = null;
@@ -30,9 +51,8 @@ public abstract class AbstractStringWrapperTest {
 
     final List<Object[]> params = new ArrayList<>();
     final StringBuilder all = new StringBuilder();
-    for (final String s : asList("", "x", "X", " \t \n \f \r \b \" \' \\ ", "0123456789",
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz", "+$!(/\"\\|", "\uD834\uDD1E",
-        "\0", "x\0x", " ")) {
+    for (final String s : asList("", "x", "X", " \t \n \f \r \b \" \' \\ ", "0123456789", "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        "abcdefghijklmnopqrstuvwxyz", "+$!(/\"\\|", "\uD834\uDD1E", "\0", "x\0x", " ")) {
       params.add(new Object[] { s });
       all.append(s);
     }
@@ -42,8 +62,7 @@ public abstract class AbstractStringWrapperTest {
     {
       final StringBuilder sb = new StringBuilder(1 << 19);
       for (int cp = 0; cp < Character.MAX_CODE_POINT; cp++) {
-        if (Character.isDefined(cp)
-            && (cp < Character.MIN_SURROGATE || cp > Character.MAX_SURROGATE))
+        if (Character.isDefined(cp) && (cp < Character.MIN_SURROGATE || cp > Character.MAX_SURROGATE))
           sb.appendCodePoint(cp);
       }
       params.add(new Object[] { sb.toString() });

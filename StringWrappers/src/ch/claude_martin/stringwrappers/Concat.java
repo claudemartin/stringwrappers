@@ -10,7 +10,7 @@ public final class Concat extends AbstractStringWrapper {
   /** List of character sequences. */
   private final List<CharSequence> list;
   /** Total length - the sum of all characters. */
-  private final int length;
+  private final int                length;
 
   private Concat(final List<CharSequence> list, final long length) {
     this.list = list;

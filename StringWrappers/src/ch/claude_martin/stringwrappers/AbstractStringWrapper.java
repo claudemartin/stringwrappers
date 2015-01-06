@@ -3,7 +3,11 @@ package ch.claude_martin.stringwrappers;
 import static java.util.Objects.requireNonNull;
 
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -124,6 +128,25 @@ abstract class AbstractStringWrapper implements StringWrapper {
       }
     }
     return StringUtils.equals(this, cs);
+  }
+
+  @Override
+  public boolean endsWith(final CharSequence string) {
+    requireNonNull(string, "string");
+    int lenThis = this.length();
+    int lenThat = string.length();
+    if (lenThat == 0)
+      return true;
+    if (lenThis < lenThat)
+      return false;
+    if (lenThis == lenThat)
+      return this.contentEquals(string);
+
+    while (lenThat > 0) {
+      if (this.charAt(--lenThis) != string.charAt(--lenThat))
+        return false;
+    }
+    return true;
   }
 
   @Override

@@ -2,7 +2,7 @@ package ch.claude_martin.stringwrappers;
 
 /**
  * Maps one character to some other character.
- * 
+ *
  * In java 8 this is a "Functional Interface".
  * */
 public interface CharMapper {

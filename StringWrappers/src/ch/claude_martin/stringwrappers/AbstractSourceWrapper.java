@@ -1,6 +1,5 @@
 package ch.claude_martin.stringwrappers;
 
-
 /** Wraps one single source sequence. */
 abstract class AbstractSourceWrapper extends AbstractStringWrapper {
   private final CharSequence source;

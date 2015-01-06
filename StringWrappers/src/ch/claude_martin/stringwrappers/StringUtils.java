@@ -59,10 +59,10 @@ public final class StringUtils {
   }
 
   /**
-   * Checks if two character sequences represent the same text, ignoring the case. This compares
-   * characters (UTF-16 code units). You may want to use {@link java.text.Normalizer} to compare
-   * normalized strings.
-   * 
+   * Checks if two character sequences represent the same text, ignoring the
+   * case. This compares characters (UTF-16 code units). You may want to use
+   * {@link java.text.Normalizer} to compare normalized strings.
+   *
    * @see java.util.Objects#equals(Object, Object)
    * @see String#equalsIgnoreCase(Object)
    */
@@ -105,9 +105,10 @@ public final class StringUtils {
   }
 
   /**
-   * Checks if two character sequences represent the same text. This compares characters (UTF-16
-   * code units). You may want to use {@link java.text.Normalizer} to compare normalized strings.
-   * 
+   * Checks if two character sequences represent the same text. This compares
+   * characters (UTF-16 code units). You may want to use
+   * {@link java.text.Normalizer} to compare normalized strings.
+   *
    * @see java.util.Objects#equals(Object, Object)
    * @see String#equals(Object)
    */
@@ -140,7 +141,7 @@ public final class StringUtils {
 
   /**
    * Calculates a hash code for a character sequence.
-   * 
+   *
    * @see String#hashCode()
    * @param s
    *          The sequence
