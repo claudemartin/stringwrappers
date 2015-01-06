@@ -135,10 +135,12 @@ abstract class AbstractStringWrapper implements StringWrapper {
     requireNonNull(string, "string");
     int lenThis = this.length();
     int lenThat = string.length();
-    if (lenThat == 0)
+    if (0 == lenThat)
       return true;
     if (lenThis < lenThat)
       return false;
+    if (1 == lenThat)
+      return this.charAt(lenThis - 1) == string.charAt(0);
     if (lenThis == lenThat)
       return this.contentEquals(string);
 
