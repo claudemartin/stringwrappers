@@ -5,7 +5,10 @@ import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Concatenation of multiple strings. */
+/**
+ * Concatenation of multiple strings. This only supports strings that are
+ * immutable or are not altered in length.
+ */
 public final class Concat extends AbstractStringWrapper {
   /** List of character sequences. */
   private final List<CharSequence> list;
