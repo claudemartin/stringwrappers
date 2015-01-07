@@ -62,7 +62,8 @@ public final class ASCII extends AbstractSourceWrapper {
 
   /**
    * Characters that are above a given <i>highest character</i> (starting with
-   * highChar+1) are replaced by given substitute.
+   * highChar+1) are replaced by given substitute. Note that the
+   * <i>substitute</i> can be greater than <i>highChar</i>.
    */
   public static StringWrapper of(final CharSequence source, final char substitute, final char highChar) {
     requireNonNull(source, "source");
@@ -77,14 +78,14 @@ public final class ASCII extends AbstractSourceWrapper {
   }
 
   /**
-   * Cahracters that are not ASCII (starting with \u0080) are replaces by given
-   * substitute.
+   * Cahracters that are not ASCII (starting with \u0080) are replaced by given
+   * substitute. Note that the substitute does not need to be ASCII.
    */
   public static StringWrapper of(final CharSequence source, final char substitute) {
     return of(source, '\u007F', substitute);
   }
 
-  /** Cahracters that are not ASCII (starting with \u0080) are replaces by '?'. */
+  /** Cahracters that are not ASCII (starting with \u0080) are replaced by '?'. */
   public static StringWrapper of(final CharSequence source) {
     return of(source, QUESTION_MARK);
   }
