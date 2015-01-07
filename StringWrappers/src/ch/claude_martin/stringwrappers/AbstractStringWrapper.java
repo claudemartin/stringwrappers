@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -165,5 +166,10 @@ abstract class AbstractStringWrapper implements StringWrapper {
   @Override
   public boolean isEmpty() {
     return this.length() == 0;
+  }
+
+  @Override
+  public Iterator<Character> iterator() {
+    return StringIterator.of(this);
   }
 }

@@ -3,6 +3,7 @@ package ch.claude_martin.stringwrappers;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
  * {@link #contentEquals(CharSequence)} to check for equality of two
  * {@link CharSequence}s.
  */
-public interface StringWrapper extends CharSequence {
+public interface StringWrapper extends CharSequence, Iterable<Character> {
 
   /**
    * Converts all of the characters in this String to upper case.
@@ -90,5 +91,12 @@ public interface StringWrapper extends CharSequence {
   StringWrapper repeat(final int x);
 
   boolean endsWith(final CharSequence string);
+
+  /**
+   * Iterate over all Characters.
+   */
+  // Java 8 -> Use some PrimitiveInterator instead!
+  @Override
+  Iterator<Character> iterator();
 
 }

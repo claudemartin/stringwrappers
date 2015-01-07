@@ -9,6 +9,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetEncoder;
 import java.nio.charset.CodingErrorAction;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public final class StringUtils {
   public StringUtils() {
@@ -17,6 +19,46 @@ public final class StringUtils {
 
   public static StringWrapper empty() {
     return EmptyWrapper.INSTANCE;
+  }
+
+  /** Creates a StringWrapper by a given charAt-method and a length. */
+  public static StringWrapper wrap(final int length, final CharAt charAt) {
+    return new AbstractStringWrapper() {
+      @Override
+      public int length() {
+        return length;
+      }
+
+      @Override
+      public char charAt(final int index) {
+        return charAt.get(index);
+      }
+    };
+  }
+
+  /** @see NullWrapper#of(CharSequence) */
+  public static StringWrapper wrap(final CharSequence s) {
+    return NullWrapper.of(s);
+  }
+
+  /** @see NullWrapper#of(CharSequence) */
+  public static StringWrapper wrap(final List<Character> c) {
+    return new AbstractStringWrapper() {
+      @Override
+      public int length() {
+        return c.size();
+      }
+
+      @Override
+      public char charAt(final int index) {
+        return c.get(index);
+      }
+    };
+  }
+
+  /** @see NullWrapper#of(CharSequence) */
+  public static StringWrapper wrap(final char[] c) {
+    return new CharArrayWrapper(c);
   }
 
   /** Quick check if both are the same strings. */
@@ -178,4 +220,7 @@ public final class StringUtils {
     }
   }
 
+  public Iterator<Character> iterator(final CharSequence s) {
+    return StringIterator.of(s);
+  }
 }

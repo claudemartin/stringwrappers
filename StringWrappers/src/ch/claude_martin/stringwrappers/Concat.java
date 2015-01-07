@@ -16,6 +16,7 @@ public final class Concat extends AbstractStringWrapper {
     this.list = list;
     if (list.isEmpty())
       throw new AssertionError();
+    assert length > 0;
     if (length > Integer.MAX_VALUE)
       throw new RuntimeException("Concatenated Strings are longer than Integer.MAX_VALUE");
     this.length = (int) length;
@@ -63,9 +64,9 @@ public final class Concat extends AbstractStringWrapper {
     requireNonNull(first, "first");
     requireNonNull(more, "more");
     final List<CharSequence> _list = new ArrayList<>(more.length + 1);
-    if (first.length() > 0)
-      _list.add(first);
     long len = first.length();
+    if (len > 0)
+      _list.add(first);
     for (final CharSequence s : more) {
       if (s.length() == 0)
         continue;

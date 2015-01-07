@@ -5,6 +5,8 @@ import static java.util.Objects.requireNonNull;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -118,6 +120,11 @@ public enum EmptyWrapper implements StringWrapper {
   @Override
   public boolean endsWith(final CharSequence string) {
     return requireNonNull(string, "string").length() == 0;
+  }
+
+  @Override
+  public Iterator<Character> iterator() {
+    return Collections.emptyIterator();
   }
 
 }
