@@ -1,14 +1,18 @@
 package ch.claude_martin.stringwrappers;
 
+import java.util.function.IntFunction;
+
 /** Interface of {@link CharSequence#charAt(int)}. */
-// Java 8: @FunctionalInterface
-public interface CharAt {
+@FunctionalInterface
+public interface CharAt extends IntFunction<Character> {
   char get(int i);
 
-  /* @formatter:off
-   * Java 8:
-  public default CharSequence toCharSequence(final int length) {
-    return StringUtils.of(this, length);
+  @Override
+  default Character apply(final int i) {
+    return this.get(i);
   }
-   */
+
+  public default CharSequence toCharSequence(final int length) {
+    return StringUtils.wrap(length, this);
+  }
 }

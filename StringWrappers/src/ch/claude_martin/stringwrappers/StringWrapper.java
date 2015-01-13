@@ -3,7 +3,6 @@ package ch.claude_martin.stringwrappers;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -95,8 +94,7 @@ public interface StringWrapper extends CharSequence, Iterable<Character> {
   /**
    * Iterate over all Characters.
    */
-  // Java 8 -> Use some PrimitiveInterator instead!
   @Override
-  Iterator<Character> iterator();
+  CharIterator iterator();
 
 }

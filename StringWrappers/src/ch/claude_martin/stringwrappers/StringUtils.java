@@ -221,6 +221,6 @@ public final class StringUtils {
   }
 
   public Iterator<Character> iterator(final CharSequence s) {
-    return StringIterator.of(s);
+    return StringWrapperCharIterator.of(s);
   }
 }

@@ -170,6 +170,6 @@ abstract class AbstractStringWrapper implements StringWrapper {
 
   @Override
   public Iterator<Character> iterator() {
-    return StringIterator.of(this);
+    return StringWrapperCharIterator.of(this);
   }
 }
