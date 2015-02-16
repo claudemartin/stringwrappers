@@ -19,9 +19,11 @@ public final class Rot13 extends AbstractSourceWrapper {
 
   @Override
   public char charAt(final int index) {
-    char c = this.getSource().charAt(index);
-    // a=97; m=109; z=122
-    // A=65; M=77; Z=90
+    final char c = this.getSource().charAt(index);
+    return rotate(c);
+  }
+
+  public static char rotate(char c) {
     if (c >= 'A' && c <= 'z') {
       if (c <= 'M')
         c += 13;
@@ -33,5 +35,13 @@ public final class Rot13 extends AbstractSourceWrapper {
         c -= 13;
     }
     return c;
+  }
+
+  @Override
+  protected boolean canContain(final char chr) {
+    if (this.getSource() instanceof AbstractStringWrapper) {
+      return ((AbstractStringWrapper) this.getSource()).canContain(rotate(chr));
+    }
+    return true;
   }
 }

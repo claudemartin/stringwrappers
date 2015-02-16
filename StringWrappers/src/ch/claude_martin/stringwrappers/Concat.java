@@ -3,7 +3,9 @@ package ch.claude_martin.stringwrappers;
 import static java.util.Objects.requireNonNull;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Concatenation of multiple strings. This only supports strings that are
@@ -162,4 +164,48 @@ public final class Concat extends AbstractStringWrapper {
     return new Concat(l, this.length);
   }
 
+  @Override
+  public int indexOf(final char chr, final int fromIndex) {
+    // TODO : optimize using iterator()
+    return super.indexOf(chr, fromIndex);
+  }
+
+  @Override
+  public int lastIndexOf(final char chr, final int fromIndex) {
+    // TODO : optimize using iterator()
+    return super.lastIndexOf(chr, fromIndex);
+  }
+
+  @Override
+  public CharIterator iterator() {
+    return new CharIterator() {
+      private final Iterator<CharSequence> itr = Concat.this.list.iterator();
+      private int                          i   = 0;
+      private int                          x   = 0;
+      private CharSequence                 s   = this.itr.next();
+
+      @Override
+      public boolean hasNext() {
+        return this.i < Concat.this.length();
+      }
+
+      @Override
+      public char nextChar() {
+        if (!this.hasNext())
+          throw new NoSuchElementException();
+        if (this.x >= this.s.length()) {
+          this.s = this.itr.next();
+          this.x = 0;
+        } else
+          this.x++;
+        this.i++;
+        return this.s.charAt(this.x);
+      }
+
+      @Override
+      public Character next() {
+        return this.nextChar();
+      }
+    };
+  }
 }

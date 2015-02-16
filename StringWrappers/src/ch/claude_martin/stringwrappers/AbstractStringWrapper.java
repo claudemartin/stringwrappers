@@ -2,13 +2,7 @@ package ch.claude_martin.stringwrappers;
 
 import static java.util.Objects.requireNonNull;
 
-import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -106,6 +100,132 @@ abstract class AbstractStringWrapper implements StringWrapper {
     return this.substring(start, end);
   }
 
+  /**
+   * Checks if this string can contain the given character. Returns false if it
+   * is impossible that this string would contain the given character.
+   *
+   * @param chr
+   *          The caracter
+   * @return true, if this can contain chr.
+   */
+  @SuppressWarnings("static-method")
+  protected boolean canContain(final char chr) {
+    return true;
+  }
+
+  @Override
+  public int indexOf(final int codePoint) {
+    return this.indexOf(codePoint, 0);
+  }
+
+  @Override
+  public int indexOf(final char chr) {
+    return this.indexOf(chr, 0);
+  }
+
+  @Override
+  public int indexOf(final char chr, final int fromIndex) {
+    final int length = this.length();
+    if (fromIndex >= length)
+      return -1;
+    if (!this.canContain(chr))
+      return -1;
+    for (int i = Math.max(0, fromIndex); i < length; i++) {
+      if (this.charAt(i) == chr) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  @Override
+  public int indexOf(final int codePoint, final int fromIndex) {
+    final int length = this.length();
+    if (fromIndex >= length)
+      return -1;
+
+    if (codePoint < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+      return this.indexOf((char) codePoint, fromIndex);
+    } else if (Character.isValidCodePoint(codePoint)) {
+      final char hi = Character.highSurrogate(codePoint);
+      final char lo = Character.lowSurrogate(codePoint);
+      int i = Math.max(0, fromIndex), j;
+      while ((i = this.indexOf(hi, i)) != -1) {
+        j = i + 1;
+        if (j == length)
+          return -1;
+        if (this.charAt(j) == lo)
+          return i;
+      }
+    }
+    return -1;
+  }
+
+  @Override
+  public int lastIndexOf(final int codePoint) {
+    return this.lastIndexOf(codePoint, 0);
+  }
+
+  @Override
+  public int lastIndexOf(final char chr) {
+    return this.lastIndexOf(chr, 0);
+  }
+
+  @Override
+  public int lastIndexOf(final char chr, final int fromIndex) {
+    final int length = this.length();
+    if (fromIndex >= length)
+      return -1;
+    if (!this.canContain(chr))
+      return -1;
+    for (int i = length - 1 - fromIndex; i <= 0; i--) {
+      if (this.charAt(i) == chr) {
+        return i;
+      }
+    }
+    return -1;
+  }
+
+  @Override
+  public int lastIndexOf(final int codePoint, final int fromIndex) {
+    final int length = this.length();
+    if (fromIndex >= length)
+      return -1;
+
+    if (codePoint < Character.MIN_SUPPLEMENTARY_CODE_POINT) {
+      return this.lastIndexOf((char) codePoint, fromIndex);
+    } else if (Character.isValidCodePoint(codePoint)) {
+      final char hi = Character.highSurrogate(codePoint);
+      final char lo = Character.lowSurrogate(codePoint);
+      final int first = length - 1 - Math.max(0, fromIndex);
+      int i = first;
+      while ((i = this.lastIndexOf(hi, i)) != -1) {
+        if (i == first)
+          return -1;
+        if (this.charAt(i + 1) == lo)
+          return i;
+      }
+    }
+    return -1;
+  }
+
+  @Override
+  public List<StringWrapper> split(final char chr) {
+    int off = 0;
+    int next = 0;
+    final ArrayList<StringWrapper> list = new ArrayList<>();
+    while ((next = this.indexOf(chr, off)) != -1) {
+      list.add(this.substring(off, next));
+      off = next + 1;
+    }
+    if (off == 0)
+      list.add(this);
+    else
+      list.add(this.substring(off, this.length()));
+
+    return list;
+  }
+
   @Override
   public List<StringWrapper> split(final String regexp) {
     final List<StringWrapper> list = new ArrayList<>();
@@ -153,23 +273,9 @@ abstract class AbstractStringWrapper implements StringWrapper {
   }
 
   @Override
-  public byte[] getBytes(final Charset charset) {
-    requireNonNull(charset, "charset");
-    return StringUtils.getBytes(this, charset);
-  }
-
-  @Override
   public String toString() {
     return new StringBuilder(this).toString();
   }
 
-  @Override
-  public boolean isEmpty() {
-    return this.length() == 0;
-  }
 
-  @Override
-  public Iterator<Character> iterator() {
-    return StringWrapperCharIterator.of(this);
-  }
 }

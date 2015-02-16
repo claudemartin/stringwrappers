@@ -43,6 +43,11 @@ public class ByteArrayWrapper extends AbstractStringWrapper {
     return new ByteArrayWrapper2(bytes, offset, length);
   }
 
+  @Override
+  protected boolean canContain(final char chr) {
+    return chr <= 255;
+  }
+
   static class ByteArrayWrapper2 extends ByteArrayWrapper {
     private final int offset, length, end;
 

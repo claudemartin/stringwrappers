@@ -98,6 +98,7 @@ public final class Substring extends AbstractSourceWrapper {
     return this.getSource().charAt(this.getBegin() + index);
   }
 
+  @SuppressWarnings("hiding")
   @Override
   public CharSequence subSequence(final int begin, final int end) {
     return of(this, begin, end);
@@ -114,5 +115,12 @@ public final class Substring extends AbstractSourceWrapper {
 
   int getEnd() {
     return this.end;
+  }
+
+  @Override
+  protected boolean canContain(final char chr) {
+    if (this.getSource() instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) this.getSource()).canContain(chr);
+    return true;
   }
 }

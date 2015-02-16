@@ -1,5 +1,6 @@
 package ch.claude_martin.stringwrappers;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.PrimitiveIterator;
 
@@ -26,5 +27,21 @@ public interface CharIterator extends PrimitiveIterator<Character, CharConsumer>
     Objects.requireNonNull(action);
     while (this.hasNext())
       action.acceptChar(this.nextChar());
+  }
+
+  final CharIterator EMPTY_ITERATOR = new CharIterator() {
+                                      @Override
+                                      public boolean hasNext() {
+                                        return false;
+                                      }
+
+                                      @Override
+                                      public char nextChar() {
+                                        throw new NoSuchElementException();
+                                      }
+                                    };
+
+  public static CharIterator emptyIterator() {
+    return EMPTY_ITERATOR;
   }
 }

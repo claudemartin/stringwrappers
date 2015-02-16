@@ -112,4 +112,9 @@ public final class ASCII extends AbstractSourceWrapper {
     }
     return c;
   }
+
+  @Override
+  protected boolean canContain(final char chr) {
+    return chr <= this.highChar;
+  }
 }

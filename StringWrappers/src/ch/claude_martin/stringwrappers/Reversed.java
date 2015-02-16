@@ -46,4 +46,69 @@ public final class Reversed extends AbstractSourceWrapper {
   public String toString() {
     return new StringBuilder(this.getSource()).reverse().toString();
   }
+
+  @Override
+  protected boolean canContain(final char chr) {
+    final CharSequence src = this.getSource();
+    if (src instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) src).canContain(chr);
+    return true;
+  }
+
+  @Override
+  public int indexOf(final char chr) {
+    if (this.getSource() instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) this.getSource()).lastIndexOf(chr);
+    return super.indexOf(chr);
+  }
+
+  @Override
+  public int indexOf(final char chr, final int fromIndex) {
+    if (this.getSource() instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) this.getSource()).lastIndexOf(chr, fromIndex);
+    return super.indexOf(chr, fromIndex);
+  }
+
+  @Override
+  public int indexOf(final int codePoint) {
+    if (this.getSource() instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) this.getSource()).lastIndexOf(codePoint);
+    return super.indexOf(codePoint);
+  }
+
+  @Override
+  public int indexOf(final int codePoint, final int fromIndex) {
+    if (this.getSource() instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) this.getSource()).lastIndexOf(codePoint, fromIndex);
+    return super.indexOf(codePoint, fromIndex);
+  }
+
+  @Override
+  public int lastIndexOf(final char chr) {
+    if (this.getSource() instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) this.getSource()).indexOf(chr);
+    return super.lastIndexOf(chr);
+  }
+
+  @Override
+  public int lastIndexOf(final char chr, final int fromIndex) {
+    if (this.getSource() instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) this.getSource()).indexOf(chr, fromIndex);
+    return super.lastIndexOf(chr, fromIndex);
+  }
+
+  @Override
+  public int lastIndexOf(final int codePoint) {
+    if (this.getSource() instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) this.getSource()).indexOf(codePoint);
+    return super.lastIndexOf(codePoint);
+  }
+
+  @Override
+  public int lastIndexOf(final int codePoint, final int fromIndex) {
+    if (this.getSource() instanceof AbstractStringWrapper)
+      return ((AbstractStringWrapper) this.getSource()).indexOf(codePoint, fromIndex);
+    return super.lastIndexOf(codePoint, fromIndex);
+  }
+
 }

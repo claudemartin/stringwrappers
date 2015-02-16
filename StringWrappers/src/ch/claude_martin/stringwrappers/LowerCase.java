@@ -13,4 +13,9 @@ public final class LowerCase extends CharWrapper {
       return EmptyWrapper.INSTANCE;
     return new LowerCase(source);
   }
+
+  @Override
+  protected boolean canContain(final char chr) {
+    return Character.isLowerCase(chr);
+  }
 }

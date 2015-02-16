@@ -4,9 +4,8 @@ import static java.util.Objects.requireNonNull;
 
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -123,8 +122,53 @@ public enum EmptyWrapper implements StringWrapper {
   }
 
   @Override
-  public Iterator<Character> iterator() {
-    return Collections.emptyIterator();
+  public CharIterator iterator() {
+    return CharIterator.emptyIterator();
+  }
+
+  @Override
+  public List<StringWrapper> split(final char chr) {
+    return Arrays.<StringWrapper> asList(this);
+  }
+
+  @Override
+  public int indexOf(final int codePoint) {
+    return -1;
+  }
+
+  @Override
+  public int indexOf(final char chr) {
+    return -1;
+  }
+
+  @Override
+  public int indexOf(final int codePoint, final int fromIndex) {
+    return -1;
+  }
+
+  @Override
+  public int indexOf(final char chr, final int fromIndex) {
+    return -1;
+  }
+
+  @Override
+  public int lastIndexOf(final int codePoint) {
+    return -1;
+  }
+
+  @Override
+  public int lastIndexOf(final char chr) {
+    return -1;
+  }
+
+  @Override
+  public int lastIndexOf(final int codePoint, final int fromIndex) {
+    return -1;
+  }
+
+  @Override
+  public int lastIndexOf(final char chr, final int fromIndex) {
+    return -1;
   }
 
 }

@@ -12,4 +12,9 @@ public final class UpperCase extends CharWrapper {
       return EmptyWrapper.INSTANCE;
     return new UpperCase(source);
   }
+
+  @Override
+  protected boolean canContain(final char chr) {
+    return Character.isUpperCase(chr);
+  }
 }

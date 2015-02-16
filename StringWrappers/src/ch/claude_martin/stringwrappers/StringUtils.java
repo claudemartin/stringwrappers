@@ -12,11 +12,13 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
+/** Common utility methods for Stwing wrappers. */
 public final class StringUtils {
   public StringUtils() {
     throw new RuntimeException("No instace for you!");
   }
 
+  /** Empty string. */
   public static StringWrapper empty() {
     return EmptyWrapper.INSTANCE;
   }
@@ -208,8 +210,8 @@ public final class StringUtils {
     final byte[] ba = new byte[maxLen];
 
     ce.onMalformedInput(CodingErrorAction.REPLACE)//
-    .onUnmappableCharacter(CodingErrorAction.REPLACE)//
-    .reset();
+        .onUnmappableCharacter(CodingErrorAction.REPLACE)//
+        .reset();
     try {
       final ByteBuffer buffer = ce.encode(CharBuffer.wrap(s));
       if (buffer.position() == ba.length)

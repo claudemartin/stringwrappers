@@ -32,4 +32,5 @@ public final class NullWrapper extends AbstractSourceWrapper {
   public String toString() {
     return this.getSource().toString();
   }
+
 }

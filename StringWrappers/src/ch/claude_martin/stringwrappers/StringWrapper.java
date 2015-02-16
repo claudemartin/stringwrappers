@@ -1,5 +1,7 @@
 package ch.claude_martin.stringwrappers;
 
+import static java.util.Objects.requireNonNull;
+
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.util.Collection;
@@ -50,6 +52,8 @@ public interface StringWrapper extends CharSequence, Iterable<Character> {
 
   List<StringWrapper> split(final String regexp);
 
+  List<StringWrapper> split(final char chr);
+
   boolean matches(final String regex);
 
   /**
@@ -80,9 +84,14 @@ public interface StringWrapper extends CharSequence, Iterable<Character> {
    * @return The resultant byte array
    *
    */
-  byte[] getBytes(final Charset charset);
+  default byte[] getBytes(final Charset charset) {
+    requireNonNull(charset, "charset");
+    return StringUtils.getBytes(this, charset);
+  }
 
-  boolean isEmpty();
+  default boolean isEmpty() {
+    return this.length() == 0;
+  }
 
   StringWrapper reversed();
 
@@ -95,6 +104,24 @@ public interface StringWrapper extends CharSequence, Iterable<Character> {
    * Iterate over all Characters.
    */
   @Override
-  CharIterator iterator();
+  default CharIterator iterator() {
+    return StringWrapperCharIterator.of(this);
+  }
+
+  int indexOf(final int codePoint);
+
+  int indexOf(final char chr);
+
+  int indexOf(final int codePoint, final int fromIndex);
+
+  int indexOf(final char chr, final int fromIndex);
+
+  int lastIndexOf(final int codePoint);
+
+  int lastIndexOf(final char chr);
+
+  int lastIndexOf(final int codePoint, final int fromIndex);
+
+  int lastIndexOf(final char chr, final int fromIndex);
 
 }
