@@ -85,7 +85,7 @@ public final class ASCII extends AbstractSourceWrapper {
     return of(source, '\u007F', substitute);
   }
 
-  /** Cahracters that are not ASCII (starting with \u0080) are replaced by '?'. */
+  /** Characters that are not ASCII (starting with \u0080) are replaced by '?'. */
   public static StringWrapper of(final CharSequence source) {
     return of(source, QUESTION_MARK);
   }
