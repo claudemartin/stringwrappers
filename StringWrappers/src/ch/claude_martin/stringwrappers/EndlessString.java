@@ -1,5 +1,7 @@
 package ch.claude_martin.stringwrappers;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.PrimitiveIterator;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -11,10 +13,54 @@ import java.util.stream.StreamSupport;
  * However, the Iterator is actually endless.
  */
 public class EndlessString extends AbstractStringWrapper {
+  /**
+   * Creates an endless string by repeating a given string. Note that an empty
+   * string causes an {@link IllegalArgumentException}.
+   *
+   * @param s
+   *          a nonempty string
+   * @return endless repetition of given string.
+   */
+  public static StringWrapper repeat(final CharSequence s) {
+    requireNonNull(s, "s");
+    if (s.length() == 0)
+      throw new IllegalArgumentException("String must not be empty.");
+    if (s.length() == 1) {
+      final char first = s.charAt(0);
+      return new EndlessString(i -> first);
+    }
+    if (s.length() == 2) {
+      final char first = s.charAt(0);
+      final char second = s.charAt(1);
+      return new EndlessString(i -> i % 2 == 0 ? first : second);
+    }
+
+    final int length = s.length();
+    return new EndlessString(i -> {
+      if (i < 0) {
+        i += Integer.MAX_VALUE + 2;
+        i += Integer.MAX_VALUE % length;
+      }
+      return s.charAt(i % length);
+    });
+  }
+
+  /**
+   * Creates an endless string by the use of a given generator. Note that the
+   * index of a character can be negative.
+   *
+   * @param generator
+   *          creates characters for all values of an integer.
+   * @return endless string.
+   */
+  public static StringWrapper of(final CharAt generator) {
+    requireNonNull(generator, "generator");
+    return new EndlessString(generator);
+  }
 
   private final CharAt generator;
 
-  public EndlessString(final CharAt generator) {
+  private EndlessString(final CharAt generator) {
     super();
     this.generator = generator;
   }
