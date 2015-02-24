@@ -4,8 +4,9 @@ import static java.util.Objects.requireNonNull;
 
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This is the common interface of all wrapper classes. This extends
@@ -37,24 +38,94 @@ public interface StringWrapper extends CharSequence, Iterable<Character> {
    */
   StringWrapper toLowerCase();
 
-  StringWrapper trim();
+  default StringWrapper trim() {
+    int begin = 0;
+    int end = this.length();
+    while ((begin < end) && (this.charAt(begin) <= ' ')) {
+      begin++;
+    }
+    while ((begin < end) && (this.charAt(end - 1) <= ' ')) {
+      end--;
+    }
+    return ((begin > 0) || (end < this.length())) ? this.substring(begin, end) : this;
+  }
 
-  StringWrapper trim(final char chr, final char... more);
+  default StringWrapper trim(final char chr, final char... more) {
+    final Set<Character> set = new TreeSet<>();
+    set.add(chr);
+    for (final Character c : more) {
+      set.add(c);
+    }
+    return this.trim(set);
+  }
 
-  StringWrapper trim(final Collection<Character> chars);
+  default StringWrapper trim(final Collection<Character> chars) {
+    Set<Character> set;
+    if (chars instanceof Set)
+      set = (Set<Character>) chars;
+    else
+      set = new TreeSet<>(chars);
 
-  StringWrapper concat(final CharSequence... s);
+    int begin = 0;
+    int end = this.length();
+
+    while (begin < end && set.contains(this.charAt(begin))) {
+      begin++;
+    }
+
+    while (begin < end && set.contains(this.charAt(end - 1))) {
+      end--;
+    }
+
+    return Substring.of(this, begin, end);
+  }
+
+  default StringWrapper concat(final CharSequence... s) {
+    return Concat.of(this, s);
+  }
 
   /** Maps all characters. */
-  StringWrapper map(final CharMapper mapper);
+  default StringWrapper map(final CharMapper mapper) {
+    return CharWrapper.of(this, mapper);
+  }
 
-  StringWrapper substring(final int begin, final int end);
+  default StringWrapper substring(final int begin, final int end) {
+    return Substring.of(this, begin, end);
+  }
 
-  List<StringWrapper> split(final String regexp);
+  @Override
+  default CharSequence subSequence(final int start, final int end) {
+    return this.substring(start, end);
+  }
 
-  List<StringWrapper> split(final char chr);
+  default List<StringWrapper> split(final String regexp) {
+    final List<StringWrapper> list = new ArrayList<>();
+    final Matcher m = Pattern.compile(regexp).matcher(this);
+    while (m.find()) {
+      list.add(this.substring(m.start(), m.end()));
+    }
+    return list;
+  }
 
-  boolean matches(final String regex);
+  default List<StringWrapper> split(final char chr) {
+    int off = 0;
+    int next = 0;
+    final ArrayList<StringWrapper> list = new ArrayList<>();
+    while ((next = this.indexOf(chr, off)) != -1) {
+      list.add(this.substring(off, next));
+      off = next + 1;
+    }
+    if (off == 0)
+      list.add(this);
+    else
+      list.add(this.substring(off, this.length()));
+
+    return list;
+  }
+
+  default boolean matches(final String regex) {
+    return Pattern.matches(regex, this);
+  }
 
   /**
    * Compares this to the specified {@code CharSequence}. The result is
@@ -70,7 +141,14 @@ public interface StringWrapper extends CharSequence, Iterable<Character> {
    *         sequence of char values as the specified sequence, {@code false}
    *         otherwise
    */
-  boolean contentEquals(final CharSequence cs);
+  default boolean contentEquals(final CharSequence cs) {
+    if (cs instanceof StringBuffer) {
+      synchronized (cs) {
+        return StringUtils.equals(this, cs);
+      }
+    }
+    return StringUtils.equals(this, cs);
+  }
 
   /**
    * Encodes this {@code StringWrapper} into a sequence of bytes using the given
@@ -93,12 +171,31 @@ public interface StringWrapper extends CharSequence, Iterable<Character> {
     return this.length() == 0;
   }
 
-  StringWrapper reversed();
+  default StringWrapper reversed() {
+    return Reversed.of(this);
+  }
 
   /** Repeat this string x times. */
-  StringWrapper repeat(final int x);
+  default StringWrapper repeat(final int x) {
+    return Concat.repeat(this, x);
+  }
 
-  boolean endsWith(final CharSequence string);
+  default boolean startsWith(final CharSequence prefix) {
+    return startsWith(prefix, 0);
+  }
+
+  default boolean startsWith(final CharSequence prefix, final int toffset) {
+    final int len = this.length();
+    for (int i = toffset, j = 0; i < len; i++) {
+      if (this.charAt(i) != prefix.charAt(j++))
+        return false;
+    }
+    return true;
+  }
+
+  default boolean endsWith(final CharSequence suffix) {
+    return this.startsWith(suffix, this.length() - suffix.length());
+  }
 
   /**
    * Iterate over all Characters.
@@ -108,20 +205,48 @@ public interface StringWrapper extends CharSequence, Iterable<Character> {
     return StringWrapperCharIterator.of(this);
   }
 
-  int indexOf(final int codePoint);
+  default int indexOf(final int codePoint) {
+    return indexOf(codePoint, 0);
+  }
 
-  int indexOf(final char chr);
+  default int indexOf(final char chr) {
+    return this.indexOf(chr, 0);
+  }
 
   int indexOf(final int codePoint, final int fromIndex);
 
-  int indexOf(final char chr, final int fromIndex);
+  default int indexOf(final char chr, final int fromIndex) {
+    final int length = this.length();
+    if (fromIndex >= length)
+      return -1;
+    for (int i = Math.max(0, fromIndex); i < length; i++) {
+      if (this.charAt(i) == chr) {
+        return i;
+      }
+    }
+    return -1;
+  }
 
-  int lastIndexOf(final int codePoint);
+  default int lastIndexOf(final int codePoint) {
+    return this.lastIndexOf(codePoint, 0);
+  }
 
-  int lastIndexOf(final char chr);
+  default int lastIndexOf(final char chr) {
+    return lastIndexOf(chr, 0);
+  }
 
   int lastIndexOf(final int codePoint, final int fromIndex);
 
-  int lastIndexOf(final char chr, final int fromIndex);
+  default int lastIndexOf(final char chr, final int fromIndex) {
+    final int length = this.length();
+    if (fromIndex >= length)
+      return -1;
+    for (int i = length - 1 - fromIndex; i <= 0; i--) {
+      if (this.charAt(i) == chr) {
+        return i;
+      }
+    }
+    return -1;
+  }
 
 }
