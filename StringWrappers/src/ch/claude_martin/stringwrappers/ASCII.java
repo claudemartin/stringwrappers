@@ -78,7 +78,7 @@ public final class ASCII extends AbstractSourceWrapper {
   }
 
   /**
-   * Cahracters that are not ASCII (starting with \u0080) are replaced by given
+   * Characters that are not ASCII (starting with \u0080) are replaced by given
    * substitute. Note that the substitute does not need to be ASCII.
    */
   public static StringWrapper of(final CharSequence source, final char substitute) {
