@@ -58,7 +58,7 @@ public class EndlessString extends AbstractStringWrapper {
     return new EndlessString(generator);
   }
 
-  private final CharAt generator;
+  final CharAt generator;
 
   private EndlessString(final CharAt generator) {
     super();
