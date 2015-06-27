@@ -28,7 +28,6 @@ public abstract class AbstractStringWrapperTest {
     return CharWrapper.of(Substring.ofMaxLength(s, 20, "..."), this.printable);
   }
 
-  @SuppressWarnings("static-method")
   public void assertEqualStrings(final CharSequence expected, final CharSequence actual) {
     if (StringUtils.same(expected, actual))
       return;
