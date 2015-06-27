@@ -222,7 +222,7 @@ public final class StringUtils {
     }
   }
 
-  public Iterator<Character> iterator(final CharSequence s) {
+  public static Iterator<Character> iterator(final CharSequence s) {
     return StringWrapperCharIterator.of(s);
   }
 }
