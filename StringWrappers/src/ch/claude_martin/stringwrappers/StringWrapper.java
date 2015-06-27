@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
+import java.text.CharacterIterator;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -198,11 +199,89 @@ public interface StringWrapper extends CharSequence, Iterable<Character> {
   }
 
   /**
-   * Iterate over all Characters.
+   * Iterate over all Characters using a
+   * <code>{@link PrimitiveIterator}{@code<Character, CharConsumer>}</code>.
+   *
+   * Iterator for an {@link EndlessString} returns infinite characters.
    */
   @Override
   default CharIterator iterator() {
     return StringWrapperCharIterator.of(this);
+  }
+
+  /**
+   * Iterate over all Characters using a {@link CharacterIterator}.
+   *
+   * CharacterIterator for an {@link EndlessString} returns
+   * {@link Integer#MAX_VALUE} characters.
+   */
+  default CharacterIterator characterIterator() {
+    return new CharacterIterator() {
+      private int       pos = 0;
+      private final int len = StringWrapper.this.length();
+
+      @Override
+      public char first() {
+        return StringWrapper.this.charAt(0);
+      }
+
+      @Override
+      public char last() {
+        return StringWrapper.this.charAt(this.len - 1);
+      }
+
+      @Override
+      public char current() {
+        if (this.pos >= this.len || this.pos < 0)
+          return DONE;
+        return StringWrapper.this.charAt(this.pos);
+      }
+
+      @Override
+      public char next() {
+        if (this.pos < this.len)
+          this.pos++;
+        return current();
+      }
+
+      @Override
+      public char previous() {
+        if (this.pos >= 0)
+          this.pos--;
+        return current();
+      }
+
+      @Override
+      public char setIndex(final int position) {
+        this.pos = position;
+        return current();
+      }
+
+      @Override
+      public int getBeginIndex() {
+        return 0;
+      }
+
+      @Override
+      public int getEndIndex() {
+        return this.len;
+      }
+
+      @Override
+      public int getIndex() {
+        return this.pos;
+      }
+
+      @Override
+      public Object clone() {
+        try {
+          return super.clone();
+        } catch (final CloneNotSupportedException e) {
+          throw new RuntimeException("Not cloneable: " + this);
+        }
+      }
+    };
+
   }
 
   default int indexOf(final int codePoint) {
